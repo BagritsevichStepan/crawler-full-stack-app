@@ -1,0 +1,10 @@
+@font-face {
+    font-family: 'PPNeueMontreal-Book';
+    src: url("/css/fonts/PPNeueMontreal-Book.otf");
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    font-size: 1em;
+}

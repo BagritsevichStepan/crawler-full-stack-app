@@ -1,6 +1,16 @@
+val ktorVersion: String by project
+val serializationVersion: String by project
+val kotlinxHtmlVersion: String by project
+val logbackVersion: String by project
+val kmongoVersion: String by project
+
+val kotlinReactVersion: String by project
+val kotlinReactRouterVersion: String by project
+
 plugins {
-    kotlin("multiplatform") version "1.8.21"
     application
+    kotlin("multiplatform") version "1.8.21"
+    kotlin("plugin.serialization") version "1.8.21"
 }
 
 group = "ru.itmo.kotlin"
@@ -33,7 +43,12 @@ kotlin {
         }
     }
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$serializationVersion")
+                implementation("io.ktor:ktor-client-core:$ktorVersion")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -41,17 +56,36 @@ kotlin {
         }
         val jvmMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-server-netty:2.2.1")
-                implementation("io.ktor:ktor-server-html-builder-jvm:2.2.1")
-                implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.8.1")
+                implementation("io.ktor:ktor-server-html-builder-jvm:$ktorVersion")
+                implementation("io.ktor:ktor-serialization:$ktorVersion")
+                implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("io.ktor:ktor-server-cors:$ktorVersion")
+                implementation("io.ktor:ktor-server-compression:$ktorVersion")
+                implementation("io.ktor:ktor-server-core-jvm:$ktorVersion")
+                implementation("io.ktor:ktor-server-netty:$ktorVersion")
+
+                implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:$kotlinxHtmlVersion")
+
+                implementation("ch.qos.logback:logback-classic:$logbackVersion")
+
+                implementation("org.litote.kmongo:kmongo-coroutine-serialization:$kmongoVersion")
             }
         }
         val jvmTest by getting
         val jsMain by getting {
             dependencies {
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:18.2.0-pre.467")
-                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:18.2.0-pre.467")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react:$kotlinReactVersion")
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-dom:$kotlinReactVersion")
                 implementation("org.jetbrains.kotlin-wrappers:kotlin-emotion:11.10.5-pre.467")
+
+                implementation("org.jetbrains.kotlin-wrappers:kotlin-react-router-dom:$kotlinReactRouterVersion")
+
+                implementation("io.ktor:ktor-client-js:$ktorVersion")
+                implementation("io.ktor:ktor-client-auth:$ktorVersion")
+                implementation("io.ktor:ktor-client-serialization:$ktorVersion")
+
+                implementation(npm("react-cookie", "2.2.0"))
             }
         }
         val jsTest by getting
